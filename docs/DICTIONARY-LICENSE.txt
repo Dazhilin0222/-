@@ -1,0 +1,14 @@
+Dictionary source: Rime Terra Pinyin
+https://github.com/rime/rime-terra-pinyin/blob/master/terra_pinyin.dict.yaml
+Derived from CC-CEDICT, published by MDBG and community contributors.
+License: Creative Commons Attribution-ShareAlike 3.0
+https://creativecommons.org/licenses/by-sa/3.0/
+Changes: converted numbered pinyin to standard Taiwanese Zhuyin keyboard codes
+using pypinyin 0.55.0; retained entries of up to 12 characters; JSON packaging.
+The derived dictionary remains licensed CC BY-SA 3.0.
+
+Word frequency data is a separate, unmodified resource: essay.txt, Rime Essay.
+https://github.com/rime/rime-essay
+Copyright Rime contributors; licensed under GNU LGPL v3.
+The complete source data is provided as essay.txt, with license in
+ESSAY-LGPL-3.0.txt and ESSAY-GPL-3.0.txt. It is loaded independently to rank results.

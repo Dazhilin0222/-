@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createDecoder,toZhuyin} from '../src/decoder.js';
+const frequencies=new Map(fs.readFileSync(new URL('../public/essay.txt',import.meta.url),'utf8').trim().split('\n').map(line=>{const [word,n]=line.split('\t');return [word,Number(n)];}));
+const decode=createDecoder(JSON.parse(fs.readFileSync(new URL('../public/dictionary.json',import.meta.url))),frequencies);
+test('standard Zhuyin keyboard includes all tones',()=>{assert.equal(toZhuyin('su3cl3'),'ㄋㄧˇㄏㄠˇ');assert.equal(toZhuyin('6347'),'ˊˇˋ˙');});
+test('common phrases lead multiple distinct candidates',()=>{for(const [input,expected] of [['su3cl3','你好'],['vu,4vu,4','謝謝'],['ji394su3','我愛你']]){const results=decode(input);assert.equal(results[0].text,expected);assert.ok(results.length>1);assert.equal(new Set(results.map(r=>r.text)).size,results.length);}});
+test('first tone uses space and can be omitted at the end',()=>{assert.equal(decode('5j/ ')[0].text,'中');assert.equal(decode('5j/')[0].text,'中');});
+test('preserves punctuation and handles empty input',()=>{assert.equal(decode('su3cl3!')[0].text,'你好!');assert.deepEqual(decode(''),[]);assert.deepEqual(decode('   '),[]);});
+test('preserves unrecognized fragments and marks partial candidates',()=>{const result=decode('su3cl3🙂abc')[0];assert.ok(result.text.startsWith('你好🙂'));assert.ok(result.unknown>0);});
